@@ -1,5 +1,5 @@
 import { initializeApp } from 'firebase/app'
-import {getAuth,signInWithRedirect,signInWithPopup,GoogleAuthProvider} from 'firebase/auth';
+import {getAuth,signInWithRedirect,signInWithPopup,GoogleAuthProvider,createUserWithEmailAndPassword} from 'firebase/auth';
 //getAUth is a Auth instance
           //getFireStore :intansitiate fireStore
           // doc:retrieve documents inside of our fire store database ,generally used to get the document instance 
@@ -21,26 +21,27 @@ const firebaseConfig = {
   const firebaseApp = initializeApp(firebaseConfig);
 
   // in order to use this google Authentication, we need to intialize a provider using GoogleAuthProvider Class 
-  const provider = new GoogleAuthProvider();
+ export const googleProvider = new GoogleAuthProvider();
 
    // will take some kind of confirguration objects and we can tell different ways the Google auth Provider can behave
-  provider.setCustomParameters({
+  googleProvider.setCustomParameters({
           prompt: "select_account"
   })
 
 
   export const auth = getAuth();
-  export const signInWithGooglePopup = () => signInWithPopup(auth,provider)
-
+  export const signInWithGooglePopup = () => signInWithPopup(auth,googleProvider)
+  export const signInWithGoogleRedirect = () =>{ console.log("from Redirect")
+                                               signInWithRedirect(auth,googleProvider)}
 
   export const db = getFirestore()
-  export const createUserDocumentFromAuth = async (userAuth) => {
+  export const createUserDocumentFromAuth = async (userAuth,additionalInfo ={}) => {
 
         const userDocref = doc(db,'users',userAuth.uid)
-        console.log(userDocref);
+       
         const userSnapShot =    await getDoc(userDocref)
-        console.log(userSnapShot)
-        console.log(userSnapShot.exists() ) // allows us to check whether data exists 
+        
+         
 
          if(!userSnapShot.exists()){
                 const {displayName,email } = userAuth;
@@ -49,7 +50,8 @@ const firebaseConfig = {
                              await setDoc(userDocref,{
                                 displayName,
                                 email,
-                                createdAt
+                                createdAt,
+                                ...additionalInfo,
                              });
                 }catch(error){
                         console.log('error creating the user',error.message)
@@ -62,4 +64,9 @@ const firebaseConfig = {
              // create / set  the document with data from userAuth in my collection 
 
         //return userDocref 
+  }
+  export const createAuthUserWithEmailAndPassword = async (email,password) =>{
+    if(!email || !password) return;
+     console.log(email,password)
+    return createUserWithEmailAndPassword(auth,email,password);
   }
