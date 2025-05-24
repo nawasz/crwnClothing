@@ -1,5 +1,5 @@
 import { initializeApp } from 'firebase/app'
-import {getAuth,signInWithRedirect,signInWithPopup,GoogleAuthProvider,createUserWithEmailAndPassword} from 'firebase/auth';
+import {getAuth,signInWithRedirect,signInWithPopup,GoogleAuthProvider,createUserWithEmailAndPassword,signInWithEmailAndPassword} from 'firebase/auth';
 //getAUth is a Auth instance
           //getFireStore :intansitiate fireStore
           // doc:retrieve documents inside of our fire store database ,generally used to get the document instance 
@@ -68,5 +68,10 @@ const firebaseConfig = {
   export const createAuthUserWithEmailAndPassword = async (email,password) =>{
     if(!email || !password) return;
      console.log(email,password)
-    return createUserWithEmailAndPassword(auth,email,password);
+    return  await createUserWithEmailAndPassword(auth,email,password);
+  }
+  export const signInAuthUserWithEmailAndPassword = async (email,password) =>{
+    if(!email || !password) return;
+  
+    return await signInWithEmailAndPassword(auth,email,password);
   }
