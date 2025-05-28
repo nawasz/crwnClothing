@@ -5,6 +5,7 @@ import FormFields from '../../form-input/form-input.component';
 import './sign-up-form.styles.scss'
 import Button from '../../button/button.component';
 
+
 const defaultFormFields = {
     displayName: '',
     email:'',
@@ -17,8 +18,10 @@ const SignUpForm = () =>{
     const [formFields,setFormFields] = useState(defaultFormFields);
     const {displayName,email,password,confirmPassword}  = formFields;
     
+                          
+                               
     const handleChange = (event) =>{
-        //    console.log(event)
+       
            const {name,value} =event.target;
         
           setFormFields({  ...formFields,[name]:value})
@@ -35,6 +38,8 @@ const SignUpForm = () =>{
       }
      try{
        const  {user} =  await createAuthUserWithEmailAndPassword(email,password);
+    
+       
       await createUserDocumentFromAuth(user,{displayName })
       resetFormFields();
 
@@ -44,7 +49,7 @@ const SignUpForm = () =>{
         }
         console.log(e)}
     }
-console.log(formFields)
+
     return (
         <div className='sign-up-container'>
           <h2>Don't have an account?</h2>
