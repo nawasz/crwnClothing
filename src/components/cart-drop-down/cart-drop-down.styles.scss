@@ -1,0 +1,28 @@
+.drop-down-container{
+    height:330px;
+    width:250px;
+    border:1px solid black;
+    position:absolute;
+    z-index: 6;
+    background-color: #fff;
+    right:50px;
+    top:90px;
+   
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    
+}
+.cart-items {
+    height: 240px;
+    display: flex;
+    flex-direction: column;
+    overflow: scroll;
+  }
+
+    Button{
+      
+         margin: 6px;
+         margin-bottom: 2px;
+        
+    }

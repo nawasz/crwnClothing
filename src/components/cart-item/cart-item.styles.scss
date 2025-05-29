@@ -1,0 +1,23 @@
+.cart-item-container{
+   width:90%;
+   height:40%;
+   padding:10px;
+   display: flex;
+   gap:20px;
+   justify-content: center;
+   align-items: center;
+    
+}
+.cart-item-img{
+    width:40%;
+    height:100%;
+    object-fit: cover;
+}
+.cart-item-data{
+    width:50%;
+
+}
+h4{
+    padding: 0px ;
+    margin:0px;
+}
