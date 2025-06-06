@@ -1,0 +1,6 @@
+.product-list{
+    display:grid;
+    grid-template-columns: repeat(4,1fr); //  repeat in 4 equal sizes ; 1fr = 1 evenly distributed and equidistant size
+    column-gap:10px;
+    row-gap:50px;
+}

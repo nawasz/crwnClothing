@@ -1,26 +1,23 @@
-import React from 'react';
+import {React,useEffect} from 'react';
 import ReactDOM from 'react-dom/client';
 import { BrowserRouter } from 'react-router-dom';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { UserProvider } from './components/contexts/user.context';
-import { ProductsProvider } from './components/contexts/products.context';
+import { CategoriesProvider } from './components/contexts/categories.context';
 import {  CartProvider } from './components/contexts/cartContext';
+import {Provider } from 'react-redux'
+import { store } from './store/store';
 
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-  
-    <BrowserRouter> 
-    <UserProvider>
-        <ProductsProvider>
-            <CartProvider>
-                <App />
-            </CartProvider>         
-        </ProductsProvider>
-    </UserProvider>  
-    </BrowserRouter>
+    <Provider store={store}>
+    <BrowserRouter>  
+       <App />        
+    </BrowserRouter> 
+    </Provider> 
  
 );
 

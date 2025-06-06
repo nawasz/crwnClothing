@@ -14,7 +14,7 @@ import {
 // doc:retrieve documents inside of our fire store database ,generally used to get the document instance
 // getDoc:getting documents data
 // setDoc: setting documents data
-import { getFirestore, doc, setDoc, getDoc } from "firebase/firestore";
+import { getFirestore, doc, setDoc, getDoc,collection,writeBatch,query,getDocs } from "firebase/firestore";
 
 const firebaseConfig = {
   apiKey: "AIzaSyDtEm4eMKNM10r3NyMPwIe_te0DfnW-o_0",
@@ -44,7 +44,10 @@ export const signInWithGoogleRedirect = () => {
   signInWithRedirect(auth, googleProvider);
 };
 
-export const db = getFirestore();
+export const db = getFirestore(); //  this db instance 
+
+
+
 export const createUserDocumentFromAuth = async (
   userAuth,
   additionalInfo = {}
@@ -93,3 +96,37 @@ export const onAuthStateChangedListener = (callback) => onAuthStateChanged(auth,
 // 
 
 // when ever we call this function it has to give me a call back 
+
+/***
+ *  collection insertion 
+ */
+
+export const addCollectionAndDocuments  = async (collectionKey,objectsToAdd) => {
+         const collectionRef = collection(db,collectionKey); // creating a collection reference 
+         const batch =  writeBatch(db); // we have to pass in the database that we are trying to make batch on 
+         objectsToAdd.forEach((object) =>{
+
+          // get the document reference 
+          const docRef = doc(collectionRef,object.title.toLowerCase()); // doc(db, key)
+          batch.set(docRef,object); // attach writes
+          
+         })
+         await batch.commit();
+         console.log('done');
+}
+
+export const getCategoriesAndDocuments = async () => {
+  const collectionRef = collection(db,'category');
+    const q = query(collectionRef); // this will  snapshot with this 
+
+    const querySnapshot  = await getDocs(q); //gets snapShots of documents in that collectionRef
+                                            // querySnapshot.doc  will give array of all individual documents  inside
+                                            
+                        return   querySnapshot.docs.map((docsSnapShot) => docsSnapShot.data()) ;
+                        // reduce((acc,docSnapShot)=>{
+                              //  const {title, items } = docSnapShot.data();
+                              //  acc[title.toLowerCase() ] = items;
+                              //  return acc;
+                          //  },{})
+    
+}

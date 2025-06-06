@@ -1,34 +1,47 @@
-import { createContext, useState, useEffect } from "react";
-import {
-  createUserDocumentFromAuth,
-  onAuthStateChangedListener,
-  signOutUser,
-} from "../../utils/firebase/firebase.utils";
+import { createContext,useReducer } from "react";
+
+
 
 // as the actual value you want to access
 export const UserContext = createContext({
   currentUser: null,
   setCurrentUser: () => null,
 });
+export const USER_ACTION_TYPES = {
+  SET_CURRENT_USER:'SET_CURRENT_USER'
+}
+const userReducer = (state,actionType) =>{
+  const {type,payload} = actionType;
+  
+  switch(type){
+    case USER_ACTION_TYPES.SET_CURRENT_USER:
+       return{
+        ...state,
+        currentUser:payload
+       }
+       default:
+        throw new Error(`Unhandled type ${type} in userReducer`);
+        
+  }
+  
+  
+}
+
+const INITIAL_STATE ={
+  currentUser:null
+}
+
 export const UserProvider = ({ children }) => {
-  const [currentUser, setCurrentUser] = useState(null);
-  const value = { currentUser, setCurrentUser };
 
-  useEffect(() => {
-    const unsubscribe = onAuthStateChangedListener((user) => {
-      if (user) {
-        createUserDocumentFromAuth(user);
-      }
-      setCurrentUser(user);
-      console.log(user);
-    });
+        const [state,dispatch]   =  useReducer(userReducer,INITIAL_STATE);
+        const  {currentUser }  = state;
+        
+        const  setCurrentUser = (user) =>{
+                  dispatch({type:USER_ACTION_TYPES.SET_CURRENT_USER,payload:user})
+        } ;
+        const value = { currentUser,setCurrentUser};
 
-    // when this mounts it will check the authentication status automatically
-     
-    // this function calls callback function when ever wuthentication state of our authstate changed
-    // this will unsubscribe function  when ever it will ummount
-    return unsubscribe;
-  }, []);
+       
 
-  return <UserContext.Provider value={value}>{children}</UserContext.Provider>;
+        return <UserContext.Provider value={value}>{children}</UserContext.Provider>;
 };
