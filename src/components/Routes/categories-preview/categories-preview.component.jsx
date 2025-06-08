@@ -7,16 +7,18 @@ import {Link} from 'react-router-dom'
 import Preview from '../../preview/preview-component';
 import './categories-preview.styles.scss'
 // import { useSelector } from 'react-redux';
-import { CategortSelector } from '../../../store/categories/category.selector';
+import { selectCategories,selectCategoriesIsLoading } from '../../../store/categories/category.selector';
+import { useSelector } from 'react-redux';
+import Spinner from '../../spinner/spinner.component'
 
 const CategoriesPreview  = () => {
-  console.log("from categoryPreview")
-  const categoriesMap = CategortSelector();
-  console.log(categoriesMap);
+
+  const categoriesMap = useSelector(selectCategories);
+  const isLoading  = useSelector(selectCategoriesIsLoading);
   
   return (
     <>
-    {categoriesMap && Object.keys(categoriesMap).map(title => (
+    {isLoading ? <Spinner/> :categoriesMap && Object.keys(categoriesMap).map(title => (
                        <>
                        <Link className="nav-link" to={title}>
                         <h2>{title.toUpperCase()}</h2>

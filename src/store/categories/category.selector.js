@@ -13,21 +13,31 @@ const selectCategoryReducer  = ( state) => state.categories // selecting only ca
 // createSelector has 2 arguments 1.array of input selectors and 2.output selector 
 export const  selectCategories = createSelector(
   [selectCategoryReducer],
-  (categoriesSlice ) => categoriesSlice.categories 
-) // this will gives us back categories Array that lives on the categoriesSlice of state 
-export  const CategortSelector = () =>{
-    console.log("selector fired")
- const categoryArray = useSelector((state) => state.categories.categoriesArray)
+  (categoriesSlice ) => categoriesSlice.categoriesArray.reduce((acc,category) =>{
+                             const {title,items} = category;
+                             acc[title.toLowerCase()] = items;
+                             return acc;
+ },{}))
+ // this will gives us back categories Array that lives on the categoriesSlice of state 
+// export  const CategortSelector = () =>{
+//     console.log("selector fired")
+//  const categoryArray = useSelector((state) => state.categories.categoriesArray)
        
   
  
-    const categoryMap = categoryArray && categoryArray.reduce((acc,category) =>{
-            const {title,items}  = category;
-            acc[title.toLowerCase()] =  items;
-            return acc;
-    },{})
-  return categoryMap;
-}
+//     const categoryMap = categoryArray && categoryArray.reduce((acc,category) =>{
+//             const {title,items}  = category;
+//             acc[title.toLowerCase()] =  items;
+//             return acc;
+//     },{})
+//   return categoryMap;
+// }
+
+
+export const selectCategoriesIsLoading = createSelector(
+  [selectCategoryReducer],
+  (categoriesSlice) => categoriesSlice.isLoading
+);
 
 //  reduce((acc,docSnapShot)=>{
 //                               //  const {title, items } = docSnapShot.data();

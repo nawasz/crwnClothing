@@ -4,23 +4,22 @@ import { useContext,useState,useEffect } from 'react';
 import { CategoriesContext } from '../contexts/categories.context';
 import ProductCard from '../product-card/product-card.components';
 import { useSelector } from 'react-redux';
-import {CategortSelector} from '../../store/categories/category.selector';
+import {selectCategories,selectCategoriesIsLoading} from '../../store/categories/category.selector';
+import Spinner from '../spinner/spinner.component';
 const Category  = ()  =>{
  
     const { category}    = useParams();
-   
-       console.log("from categoryComponenet")
-       console.log("render/re-render"); 
-
-    const categoriesMap = CategortSelector();
+    const categoriesMap = useSelector(selectCategories);
                 
-    console.log(categoriesMap)
-   
   
+   const isLoading  = useSelector(selectCategoriesIsLoading);
+     console.log(isLoading)
     const [products,setProducts]=useState([]);
              useEffect(() =>{
-                          console.log("effect fired calling setProducts")
-                setProducts(categoriesMap[category]);
+                 setTimeout(() =>{
+                         setProducts(categoriesMap[category]);
+                 },1000)        
+                
      
              },[category,categoriesMap]);
             
@@ -30,7 +29,8 @@ const Category  = ()  =>{
              <h2 class='title'>
                     {category.toUpperCase()}
                 </h2>
-             <div className="category-container">
+                {
+                  isLoading ? <Spinner/>: <div className="category-container">
                
            {
             products &&
@@ -40,6 +40,8 @@ const Category  = ()  =>{
            
            }
             </div>
+                }
+            
 
             </>
               
